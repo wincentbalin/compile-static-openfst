@@ -1,0 +1,24 @@
+--- src/bin/utildefs.h.orig     2018-01-07 09:55:54.642637895 +0000
++++ src/bin/utildefs.h  2018-01-07 09:59:11.241600596 +0000
+@@ -30,7 +30,9 @@
+ #include <fst/vector-fst.h>
+ #include <thrax/grm-manager.h>
+
++#ifndef __MINGW32__
+ enum TokenType { SYMBOL = 1, BYTE = 2, UTF8 = 3 };
++#endif
+
+ namespace thrax {
+
+@@ -43,7 +45,11 @@
+ bool FstToStrings(const fst::VectorFst<fst::StdArc> &fst,
+                   std::vector<std::pair<string, float>> *strings,
+                   const fst::SymbolTable *generated_symtab,
++#ifdef __MINGW32__
++                  fst::StringTokenType type = fst::BYTE,
++#else
+                   TokenType type = BYTE,
++#endif
+                   fst::SymbolTable *symtab = nullptr, size_t n = 1);
+
+ // Find the generated labels from the grammar.

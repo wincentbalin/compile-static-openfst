@@ -1,0 +1,13 @@
+--- src/include/thrax/algo/cdrewrite.h.orig     2017-08-05 13:29:24.147125321 +0000
++++ src/include/thrax/algo/cdrewrite.h  2017-08-05 14:32:59.651403893 +0000
+@@ -15,6 +15,10 @@
+ #include <fst/fstlib.h>
+ #include <thrax/algo/optimize.h>
+
++#if defined __MINGW32__
++#undef OPTIONAL
++#endif
++
+ namespace fst {
+
+ enum CDRewriteDirection { LEFT_TO_RIGHT, RIGHT_TO_LEFT, SIMULTANEOUS };

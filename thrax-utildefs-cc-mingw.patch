@@ -1,0 +1,54 @@
+--- src/bin/utildefs.cc.orig    2018-01-07 10:00:07.971336503 +0000
++++ src/bin/utildefs.cc 2018-01-07 10:03:36.489712156 +0000
+@@ -44,7 +44,11 @@
+ namespace thrax {
+ namespace {
+
++#if defined __MINGW32__
++inline bool AppendLabel(StdArc::Label label, fst::StringTokenType type,
++#else
+ inline bool AppendLabel(StdArc::Label label, TokenType type,
++#endif
+                         const SymbolTable *generated_symtab,
+                         SymbolTable *symtab, string *path) {
+   if (label != 0) {
+@@ -55,7 +59,11 @@
+     if (generated_symtab && !generated_symtab->Find(label).empty()) {
+       string sym = generated_symtab->Find(label);
+       *path += "[" + sym + "]";
++#if defined __MINGW32__
++    } else if (type == fst::SYMBOL) {
++#else
+     } else if (type == SYMBOL) {
++#endif
+       string sym = symtab->Find(label);
+       if (sym == "") {
+         LOG(ERROR) << "Missing symbol in symbol table for id: " << label;
+@@ -65,9 +73,15 @@
+       // space-separated.
+       if (!path->empty()) *path += FLAGS_field_separator;
+       *path += sym;
++#if defined __MINGW32__
++    } else if (type == fst::BYTE) {
++      path->push_back(label);
++    } else if (type == fst::UTF8) {
++#else
+     } else if (type == BYTE) {
+       path->push_back(label);
+     } else if (type == UTF8) {
++#endif
+       string utf8_string;
+       std::vector<StdArc::Label> labels;
+       labels.push_back(label);
+@@ -85,7 +99,11 @@
+
+ bool FstToStrings(const StdVectorFst &fst,
+                   std::vector<std::pair<string, float>> *strings,
++#if defined __MINGW32__
++                  const SymbolTable *generated_symtab, fst::StringTokenType type,
++#else
+                   const SymbolTable *generated_symtab, TokenType type,
++#endif
+                   SymbolTable *symtab, size_t n) {
+   StdVectorFst shortest_path;
+   if (n == 1) {

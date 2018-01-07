@@ -1,0 +1,52 @@
+--- src/bin/random-generator.cc.orig    2017-08-06 19:07:01.034724224 +0000
++++ src/bin/random-generator.cc 2017-08-06 19:10:38.912823270 +0000
+@@ -45,6 +45,10 @@
+ typedef VectorFst<StdArc> Transducer;
+ typedef StdArc::Label Label;
+
++#if defined __MINGW32__
++#undef far
++#endif
++
+ DEFINE_string(far, "", "Path to the FAR.");
+ DEFINE_string(rule, "", "Names of the rewrite rule.");
+ DEFINE_string(input_mode, "byte", "Either \"byte\", \"utf8\", or the path to "
+@@ -61,6 +65,30 @@
+   CHECK(grm.LoadArchive(FLAGS_far));
+   const SymbolTable* generated_symtab = GetGeneratedSymbolTable(&grm);
+   SymbolTable* output_symtab = NULL;
++#if defined __MINGW32__
++  fst::StringTokenType type;
++  if (FLAGS_output_mode == "byte") {
++    type = fst::BYTE;
++  } else if (FLAGS_output_mode == "utf8") {
++    type = fst::UTF8;
++  } else {
++    type = fst::SYMBOL;
++    output_symtab = SymbolTable::ReadText(FLAGS_output_mode);
++    CHECK(output_symtab)
++        ;
++  }
++  SymbolTable* input_symtab = NULL;
++  if (FLAGS_input_mode == "byte") {
++    type = fst::BYTE;
++  } else if (FLAGS_input_mode == "utf8") {
++    type = fst::UTF8;
++  } else {
++    type = fst::SYMBOL;
++    input_symtab = SymbolTable::ReadText(FLAGS_input_mode);
++    CHECK(input_symtab)
++        ;
++  }
++#else
+   TokenType type;
+   if (FLAGS_output_mode == "byte") {
+     type = BYTE;
+@@ -83,6 +111,7 @@
+     CHECK(input_symtab)
+         ;
+   }
++#endif
+   if (FLAGS_rule.empty())
+     LOG(FATAL) << "--rule must be specified";
+   const fst::Fst<StdArc>* fst = grm.GetFst(FLAGS_rule);

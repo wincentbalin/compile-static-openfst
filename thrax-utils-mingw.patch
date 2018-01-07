@@ -1,0 +1,14 @@
+--- src/lib/util/utils.cc.orig  2018-01-07 08:45:07.311274705 +0000
++++ src/lib/util/utils.cc       2018-01-07 08:46:20.510453246 +0000
+@@ -184,7 +184,11 @@
+       if (S_ISDIR(stat_buf.st_mode)) continue;
+       return false;
+     } else {
++#ifdef __MINGW32__
++      if (mkdir(crpath) == -1) return false;
++#else
+       if (mkdir(crpath, ACCESSPERMS) == -1) return false;
++#endif
+     }
+   }
+   return true;

@@ -1,0 +1,11 @@
+--- configure.orig      2018-01-07 09:18:54.268792589 +0000
++++ configure   2018-01-07 09:19:09.388672795 +0000
+@@ -4231,7 +4231,7 @@
+ # Thrax does not throw exceptions, so we do not generate exception handling
+ # code. However, users are free to re-enable exception handling.
+ # Thrax assumes `char` is `unsigned char`; -fsigned-char is likely unsafe.
+-CPPFLAGS="$CPPFLAGS -fno-exceptions -funsigned-char"
++CPPFLAGS="$CPPFLAGS -funsigned-char"
+ CXXFLAGS="$CXXFLAGS -std=c++11"
+
+ ac_ext=cpp

@@ -1,0 +1,11 @@
+--- src/bin/rewrite-tester-utils.h.orig 2018-01-07 08:59:55.562000378 +0000
++++ src/bin/rewrite-tester-utils.h      2018-01-07 09:00:25.261512816 +0000
+@@ -38,7 +38,7 @@
+   fst::SymbolTable* utf8_symtab_;
+   const fst::SymbolTable* generated_symtab_;
+   fst::SymbolTable* input_symtab_;
+-  TokenType type_;
++  fst::StringTokenType type_;
+   fst::SymbolTable* output_symtab_;
+
+   DISALLOW_COPY_AND_ASSIGN(RewriteTesterUtils);
