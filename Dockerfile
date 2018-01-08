@@ -56,6 +56,7 @@ RUN wget -O mman-win32-master.zip https://github.com/witwall/mman-win32/archive/
     unzip mman-win32-master.zip
 WORKDIR mman-win32-master
 RUN chmod 0755 configure && \
+    sync && \
     ./configure --prefix=$C --libdir=$C/lib --incdir=$C/include --enable-static --disable-shared --cross-prefix=$CROSS_ARCH- && \
     make && \
     make install
@@ -226,6 +227,7 @@ WORKDIR ..
 # Compile mman-win32
 WORKDIR mman-win32-master
 RUN chmod 0755 configure && \
+    sync && \
     ./configure --prefix=$C --libdir=$C/lib --incdir=$C/include --enable-static --disable-shared --cross-prefix=$CROSS_ARCH- && \
     make && \
     make install
