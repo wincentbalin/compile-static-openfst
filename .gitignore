@@ -1,3 +1,7 @@
+# Ignore resulting zip files
+openfst+ngram+thrax-mingw64.zip
+openfst+ngram+thrax-mingw32.zip
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
