@@ -14,7 +14,7 @@
 @@ -61,6 +65,30 @@
    CHECK(grm.LoadArchive(FLAGS_far));
    const SymbolTable* generated_symtab = GetGeneratedSymbolTable(&grm);
-   SymbolTable* output_symtab = NULL;
+   SymbolTable* output_symtab = nullptr;
 +#if defined __MINGW32__
 +  fst::StringTokenType type;
 +  if (FLAGS_output_mode == "byte") {

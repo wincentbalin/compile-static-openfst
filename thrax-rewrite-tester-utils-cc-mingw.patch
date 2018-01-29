@@ -11,10 +11,21 @@
  DEFINE_string(far, "", "Path to the FAR.");
  DEFINE_string(rules, "", "Names of the rewrite rules.");
  DEFINE_string(input_mode, "byte", "Either \"byte\", \"utf8\", or the path to a "
+@@ -47,8 +51,8 @@
+
+ inline void InitializeHistoryFile() {
+   // Create history file if it doesn't exist
+-  if (!File::Open(FLAGS_history_file, "r")) {
+-    File* fp = File::Open(FLAGS_history_file, "w");
++  if (!Open(FLAGS_history_file, "r")) {
++    File* fp = Open(FLAGS_history_file, "w");
+     // Fail silently if we can't open it: just don't record history
+     if (fp) fp->Close();
+   }
 @@ -159,6 +163,18 @@
    }
 
-   output_symtab_ = NULL;
+   output_symtab_ = nullptr;
 +#if defined __MINGW32__
 +  if (FLAGS_output_mode == "byte") {
 +    type_ = fst::BYTE;
