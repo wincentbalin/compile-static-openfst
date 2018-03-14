@@ -27,7 +27,7 @@ ENV NCURSES_VERSION 6.0
 ENV READLINE_VERSION 7.0
 ENV OPENFST_VERSION 1.6.7
 ENV OPENGRM_NGRAM_VERSION 1.3.4
-ENV THRAX_VERSION 1.2.5
+ENV THRAX_VERSION 1.2.6
 
 # Prepare compilation directories
 ENV C /tmp/compile
@@ -163,9 +163,6 @@ RUN patch -p0 < thrax-utildefs-cc-mingw.patch
 
 COPY thrax-random-generator-cc-mingw.patch .
 RUN patch -p0 < thrax-random-generator-cc-mingw.patch
-
-COPY thrax-features-h-mingw.patch .
-RUN patch -p0 < thrax-features-h-mingw.patch
 
 RUN CPPFLAGS="-std=c++11 -I$C/include -DFST_NO_DYNAMIC_LINKING" \
     CXXFLAGS="-O2 -static-libgcc -static-libstdc++" \

@@ -1,8 +1,8 @@
---- src/bin/rewrite-tester-utils.cc.orig        2017-08-06 10:01:09.188873265 +0000
-+++ src/bin/rewrite-tester-utils.cc     2017-08-06 10:01:49.728406021 +0000
-@@ -31,6 +31,10 @@
- using thrax::Split;
- using thrax::Split;
+--- src/bin/rewrite-tester-utils.cc.orig        2018-03-14 20:56:56.910257320 +0000
++++ src/bin/rewrite-tester-utils.cc     2018-03-14 21:16:32.635724323 +0000
+@@ -28,6 +28,10 @@
+ using thrax::GetGeneratedSymbolTable;
+ using thrax::GrmManagerSpec;
 
 +#if defined __MINGW32__
 +#undef far
@@ -11,49 +11,33 @@
  DEFINE_string(far, "", "Path to the FAR.");
  DEFINE_string(rules, "", "Names of the rewrite rules.");
  DEFINE_string(input_mode, "byte", "Either \"byte\", \"utf8\", or the path to a "
-@@ -47,8 +51,8 @@
-
- inline void InitializeHistoryFile() {
-   // Create history file if it doesn't exist
--  if (!File::Open(FLAGS_history_file, "r")) {
--    File* fp = File::Open(FLAGS_history_file, "w");
-+  if (!Open(FLAGS_history_file, "r")) {
-+    File* fp = Open(FLAGS_history_file, "w");
-     // Fail silently if we can't open it: just don't record history
-     if (fp) fp->Close();
-   }
-@@ -159,6 +163,18 @@
+@@ -147,12 +151,21 @@
    }
 
    output_symtab_ = nullptr;
-+#if defined __MINGW32__
++#ifdef __MINGW32__
 +  if (FLAGS_output_mode == "byte") {
 +    type_ = fst::BYTE;
 +  } else if (FLAGS_output_mode == "utf8") {
 +    type_ = fst::UTF8;
 +  } else {
 +    type_ = fst::SYMBOL;
-+    output_symtab_ = SymbolTable::ReadText(FLAGS_output_mode);
-+    CHECK(output_symtab_)
-+        ;  // NOLINT
-+  }
 +#else
    if (FLAGS_output_mode == "byte") {
      type_ = BYTE;
    } else if (FLAGS_output_mode == "utf8") {
-@@ -169,6 +185,7 @@
+     type_ = UTF8;
+   } else {
+     type_ = SYMBOL;
++#endif
+     output_symtab_ = SymbolTable::ReadText(FLAGS_output_mode);
      CHECK(output_symtab_)
          ;  // NOLINT
-   }
-+#endif
- }
-
- const string RewriteTesterUtils::ProcessInput(const string& input) {
-@@ -183,6 +200,18 @@
+@@ -167,6 +180,15 @@
    }
    string return_val = "";
    // Set symbols for the input, if appropriate
-+#if defined __MINGW32__
++#ifdef __MINGW32__
 +  if (byte_symtab_ && type_ == fst::BYTE) {
 +    input_fst.SetInputSymbols(byte_symtab_);
 +    input_fst.SetOutputSymbols(byte_symtab_);
@@ -61,18 +45,15 @@
 +    input_fst.SetInputSymbols(utf8_symtab_);
 +    input_fst.SetOutputSymbols(utf8_symtab_);
 +  } else if (input_symtab_ && type_ == fst::SYMBOL) {
-+    input_fst.SetInputSymbols(input_symtab_);
-+    input_fst.SetOutputSymbols(input_symtab_);
-+  }
 +#else
    if (byte_symtab_ && type_ == BYTE) {
      input_fst.SetInputSymbols(byte_symtab_);
      input_fst.SetOutputSymbols(byte_symtab_);
-@@ -193,6 +222,7 @@
+@@ -174,6 +196,7 @@
+     input_fst.SetInputSymbols(utf8_symtab_);
+     input_fst.SetOutputSymbols(utf8_symtab_);
+   } else if (input_symtab_ && type_ == SYMBOL) {
++#endif
      input_fst.SetInputSymbols(input_symtab_);
      input_fst.SetOutputSymbols(input_symtab_);
    }
-+#endif
-
-   bool succeeded = true;
-   for (size_t i = 0; i < rules_.size(); ++i) {
