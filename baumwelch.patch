@@ -1,0 +1,11 @@
+--- configure.orig      2018-04-01 01:50:15.909416514 +0000
++++ configure   2018-04-01 01:50:33.489313201 +0000
+@@ -4167,7 +4167,7 @@
+ # handling.
+ # This library, like OpenFst assumes char is unsigned; -fsigned-char is likely
+ # unsafe.
+-CPPFLAGS="$CPPFLAGS -fno-exceptions -funsigned-char"
++CPPFLAGS="$CPPFLAGS -funsigned-char"
+ CXXFLAGS="$CXXFLAGS -std=c++11"
+
+ ac_ext=cpp

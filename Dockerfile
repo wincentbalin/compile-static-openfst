@@ -26,6 +26,8 @@ ENV ZLIB_VERSION 1.2.11
 ENV NCURSES_VERSION 6.0
 ENV READLINE_VERSION 7.0
 ENV OPENFST_VERSION 1.6.7
+ENV BAUMWELCH_VERSION 0.2.1
+ENV CATEGORIAL_VERSION 1.3.3
 ENV OPENGRM_NGRAM_VERSION 1.3.4
 ENV THRAX_VERSION 1.2.6
 
@@ -87,6 +89,30 @@ RUN CPPFLAGS="-DWINDOWS -DFST_NO_DYNAMIC_LINKING -DMMAN_LIBRARY -I$C/include" \
     ./configure --prefix=$C --host=$CROSS_ARCH --build=$BUILD_ARCH --enable-static --disable-shared \
         --enable-compact-fsts --enable-compress --enable-const-fsts --enable-far --enable-linear-fsts \
         --enable-lookahead-fsts --enable-mpdt --enable-ngram-fsts --enable-pdt --enable-special --enable-bin --enable-grm && \
+    make && \
+    make install
+WORKDIR ..
+
+# Download and compile Baum-Welch OpenFST extension
+RUN wget -q -O - http://openfst.org/twiki/pub/Contrib/FstContrib/baumwelch-$BAUMWELCH_VERSION.tar.gz | \
+    tar zxvf -
+WORKDIR baumwelch-$BAUMWELCH_VERSION
+COPY baumwelch.patch .
+RUN patch -p0 < baumwelch.patch
+RUN CPPFLAGS="-I$C/include -DFST_NO_DYNAMIC_LINKING -std=c++11" \
+    CXXFLAGS="-O2 -static -static-libgcc -static-libstdc++ -fexceptions" \
+    LDFLAGS="-L$C/lib -L$C/lib/fst -lfstfarscript -lfstscript -lfstfar -lfst -lm" \
+    ac_cv_lib_dl_dlopen=no \
+    ./configure --prefix=$C --host=$CROSS_ARCH --build=$BUILD_ARCH --enable-static --disable-shared --enable-bin && \
+    make LDADD="../script/libbaumwelchscript.la -lfstfarscript -lfstfar -lfstscript -lfst -lm" && \
+    make install
+WORKDIR ..
+
+# Download and compile categorial semiring OpenFST extension
+RUN wget -q -O - http://openfst.org/twiki/pub/Contrib/FstContrib/categorial-$CATEGORIAL_VERSION.tar.gz | \
+    tar zxvf -
+WORKDIR categorial-$CATEGORIAL_VERSION
+RUN ./configure --prefix=$C --host=$CROSS_ARCH --build=$BUILD_ARCH --enable-static --disable-shared && \
     make && \
     make install
 WORKDIR ..
@@ -196,6 +222,14 @@ WORKDIR openfst-$OPENFST_VERSION
 RUN make --ignore distclean
 WORKDIR ..
 
+WORKDIR baumwelch-$BAUMWELCH_VERSION
+RUN make distclean
+WORKDIR ..
+
+WORKDIR categorial-$CATEGORIAL_VERSION
+RUN make distclean
+WORKDIR ..
+
 WORKDIR opengrm-ngram-$OPENGRM_NGRAM_VERSION
 RUN make distclean
 WORKDIR ..
@@ -241,6 +275,24 @@ RUN CPPFLAGS="-DWINDOWS -DFST_NO_DYNAMIC_LINKING -DMMAN_LIBRARY -I$C/include" \
     ./configure --prefix=$C --host=$CROSS_ARCH --build=$BUILD_ARCH --enable-static --disable-shared \
         --enable-compact-fsts --enable-compress --enable-const-fsts --enable-far --enable-linear-fsts \
         --enable-lookahead-fsts --enable-mpdt --enable-ngram-fsts --enable-pdt --enable-special --enable-bin --enable-grm && \
+    make && \
+    make install
+WORKDIR ..
+
+# Compile Baum-Welch OpenFST extension
+WORKDIR baumwelch-$BAUMWELCH_VERSION
+RUN CPPFLAGS="-I$C/include -DFST_NO_DYNAMIC_LINKING -std=c++11" \
+    CXXFLAGS="-O2 -static -static-libgcc -static-libstdc++ -fexceptions" \
+    LDFLAGS="-L$C/lib -L$C/lib/fst -lfstfarscript -lfstscript -lfstfar -lfst -lm" \
+    ac_cv_lib_dl_dlopen=no \
+    ./configure --prefix=$C --host=$CROSS_ARCH --build=$BUILD_ARCH --enable-static --disable-shared --enable-bin && \
+    make LDADD="../script/libbaumwelchscript.la -lfstfarscript -lfstfar -lfstscript -lfst -lm" && \
+    make install
+WORKDIR ..
+
+# Compile categorial semiring OpenFST extension
+WORKDIR categorial-$CATEGORIAL_VERSION
+RUN ./configure --prefix=$C --host=$CROSS_ARCH --build=$BUILD_ARCH --enable-static --disable-shared && \
     make && \
     make install
 WORKDIR ..
