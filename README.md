@@ -1,6 +1,6 @@
 # OpenFST + OpenGRM-NGram + Thrax compilation for Windows using MinGW
 
-The script `compile_openfst.sh` compiles static Windows binaries of [OpenFST](http://openfst.org), [OpenGRM-NGram](http://opengrm.org) and [Thrax](http://openfst.cs.nyu.edu/twiki/bin/view/GRM/Thrax) using the included `Dockerfile`.
+The script `compile_openfst.sh` compiles static Windows binaries of [OpenFST](http://openfst.org), [OpenGRM-NGram](http://www.opengrm.org/twiki/bin/view/GRM/NGramLibrary) and [Thrax](http://www.opengrm.org/twiki/bin/view/GRM/Thrax) using the included `Dockerfile`.
 
 ## Software versions
 
