@@ -2,8 +2,8 @@
 #
 # Compile OpenFST and OpenGRM both for win32 and for win64
 
-OPENFST_VERSION=1.6.7
-BAUMWELCH_VERSION=0.2.1
+OPENFST_VERSION=1.6.8
+BAUMWELCH_VERSION=0.2.3
 CATEGORIAL_VERSION=1.3.3
 OPENGRM_NGRAM_VERSION=1.3.4
 THRAX_VERSION=1.2.6
@@ -98,7 +98,7 @@ CXXFLAGS="-O2 -static -static-libgcc -static-libstdc++ -fexceptions" \
 LDFLAGS="-L$PREFIX/lib" \
 ac_cv_lib_dl_dlopen=no \
   ./configure --prefix="$PREFIX" --host=$CROSS_ARCH --enable-static --disable-shared --enable-bin && \
-make -j$JOBS && \
+make -j$JOBS LDADD="../script/libbaumwelchscript.la -lfstfarscript -lfstfar -lfstscript -lfst" && \
 make install && \
 cd .. || exit 1
 
@@ -121,7 +121,7 @@ CPPFLAGS="-I$CURRENT_DIR -I$PREFIX/include -DFST_NO_DYNAMIC_LINKING -std=c++11" 
 CXXFLAGS="-O2 -static -static-libgcc -static-libstdc++ -fexceptions -Wa,-mbig-obj" \
 LDFLAGS="-L$PREFIX/lib" \
   ./configure --prefix="$PREFIX" --host=$CROSS_ARCH --enable-static --disable-shared && \
-make -j$JOBS && \
+make -j$JOBS AM_LDFLAGS="-L/usr/local/lib/fst -lfstfar -lfst -lm" && \
 make install && \
 cd .. || exit 1
 
@@ -143,7 +143,7 @@ CXXFLAGS="-O2 -static -static-libgcc -static-libstdc++ -fexceptions" \
 LDFLAGS="-L$PREFIX/lib" \
 LIBS="-ltermcap" \
   ./configure --prefix="$PREFIX" --host=$CROSS_ARCH --enable-static --disable-shared --enable-bin --enable-readline && \
-make && \
+make LDADD="-L/usr/local/lib/fst ../lib/libthrax.la -lfstfar -lfst -lm -lreadline" && \
 make install && \
 cd .. || exit 1
 
