@@ -1,3 +1,4 @@
 compile_openfst.sh
+compile_openfst_mxe.sh
 *.zip
 README.md
