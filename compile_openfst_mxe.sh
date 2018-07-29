@@ -1,12 +1,12 @@
-#!/bin/sh
+#!/bin/sh -e
 #
 # Compile OpenFST and OpenGRM both for win32 and for win64
 
-OPENFST_VERSION=1.6.8
-BAUMWELCH_VERSION=0.2.3
+OPENFST_VERSION=1.6.9
+BAUMWELCH_VERSION=0.2.4
 CATEGORIAL_VERSION=1.3.3
 OPENGRM_NGRAM_VERSION=1.3.4
-THRAX_VERSION=1.2.6
+THRAX_VERSION=1.2.7
 
 SCRIPT_FILENAME=`readlink -f $0`
 
@@ -43,12 +43,12 @@ download_source()
 {
   if [ ! -d "$ARCHIVE_DIR" ]
   then
-    mkdir -p "$ARCHIVE_DIR" || exit 1
+    mkdir -p "$ARCHIVE_DIR"
   fi
 
-  cd "$ARCHIVE_DIR"         || exit 1
-  wget -N $2/$1             || exit 1
-  cd "$CURRENT_DIR"         || exit 1
+  cd "$ARCHIVE_DIR" && \
+  wget -N $2/$1 && \
+  cd "$CURRENT_DIR"
 }
 
 # Adjust PATH
@@ -85,7 +85,7 @@ LDFLAGS="-lmman" \
     --enable-bin --enable-grm && \
 make -j$JOBS && \
 make install && \
-cd .. || exit 1
+cd ..
 
 # Compile Baum-Welch extension
 download_source baumwelch-$BAUMWELCH_VERSION.tar.gz http://openfst.org/twiki/pub/Contrib/FstContrib/
@@ -100,7 +100,7 @@ ac_cv_lib_dl_dlopen=no \
   ./configure --prefix="$PREFIX" --host=$CROSS_ARCH --enable-static --disable-shared --enable-bin && \
 make -j$JOBS LDADD="../script/libbaumwelchscript.la -lfstfarscript -lfstfar -lfstscript -lfst" && \
 make install && \
-cd .. || exit 1
+cd ..
 
 # Compile categorial extension
 download_source categorial-$CATEGORIAL_VERSION.tar.gz http://openfst.org/twiki/pub/Contrib/FstContrib/
@@ -110,7 +110,7 @@ cd categorial-$CATEGORIAL_VERSION && \
 ./configure --prefix="$PREFIX" --host=$CROSS_ARCH --enable-static --disable-shared && \
 make -j$JOBS && \
 make install && \
-cd .. || exit 1
+cd ..
 
 # Compile OpenGRM NGram
 download_source opengrm-ngram-$OPENGRM_NGRAM_VERSION.tar.gz http://www.openfst.org/twiki/pub/GRM/NGramDownload/
@@ -123,7 +123,7 @@ LDFLAGS="-L$PREFIX/lib" \
   ./configure --prefix="$PREFIX" --host=$CROSS_ARCH --enable-static --disable-shared && \
 make -j$JOBS AM_LDFLAGS="-L/usr/local/lib/fst -lfstfar -lfst -lm" && \
 make install && \
-cd .. || exit 1
+cd ..
 
 # Compile OpenGRM Thrax
 download_source thrax-$THRAX_VERSION.tar.gz http://www.openfst.org/twiki/pub/GRM/ThraxDownload/
@@ -145,7 +145,7 @@ LIBS="-ltermcap" \
   ./configure --prefix="$PREFIX" --host=$CROSS_ARCH --enable-static --disable-shared --enable-bin --enable-readline && \
 make LDADD="-L/usr/local/lib/fst ../lib/libthrax.la -lfstfar -lfst -lm -lreadline" && \
 make install && \
-cd .. || exit 1
+cd ..
 
 # Strip binaries
 $CROSS_ARCH-strip $PREFIX/bin/*
@@ -178,7 +178,7 @@ LDFLAGS="-lmman" \
     --enable-bin --enable-grm && \
 make -j$JOBS && \
 make install && \
-cd .. || exit 1
+cd ..
 
 # Compile Baum-Welch extension
 tar zxvf $ARCHIVE_DIR/baumwelch-$BAUMWELCH_VERSION.tar.gz && \
@@ -191,7 +191,7 @@ ac_cv_lib_dl_dlopen=no \
   ./configure --prefix="$PREFIX" --host=$CROSS_ARCH --enable-static --disable-shared --enable-bin && \
 make -j$JOBS LDADD="../script/libbaumwelchscript.la -lfstfarscript -lfstfar -lfstscript -lfst" && \
 make install && \
-cd .. || exit 1
+cd ..
 
 # Compile categorial extension
 tar zxvf $ARCHIVE_DIR/categorial-$CATEGORIAL_VERSION.tar.gz && \
@@ -199,7 +199,7 @@ cd categorial-$CATEGORIAL_VERSION && \
 ./configure --prefix="$PREFIX" --host=$CROSS_ARCH --enable-static --disable-shared && \
 make -j$JOBS && \
 make install && \
-cd .. || exit 1
+cd ..
 
 # Compile OpenGRM NGram
 tar zxvf $ARCHIVE_DIR/opengrm-ngram-$OPENGRM_NGRAM_VERSION.tar.gz && \
@@ -211,7 +211,7 @@ ac_cv_lib_dl_dlopen=no \
   ./configure --prefix="$PREFIX" --host=$CROSS_ARCH --enable-static --disable-shared && \
 make -j$JOBS AM_LDFLAGS="-lfstfar -lfst" && \
 make install && \
-cd .. || exit 1
+cd ..
 
 # Compile OpenGRM Thrax
 tar zxvf $ARCHIVE_DIR/thrax-$THRAX_VERSION.tar.gz && \
@@ -231,7 +231,7 @@ LIBS="-ltermcap" \
   ./configure --prefix="$PREFIX" --host=$CROSS_ARCH --enable-static --disable-shared --enable-bin --enable-readline && \
 make LDADD="../lib/libthrax.la -lfstfar -lfst -lreadline" && \
 make install && \
-cd .. || exit 1
+cd ..
 
 # Strip binaries
 $CROSS_ARCH-strip $PREFIX/bin/*
