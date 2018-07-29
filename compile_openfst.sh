@@ -1,4 +1,4 @@
-#!/bin/sh -x -e
+#!/bin/sh -xe
 #
 # Create compile_openfst Docker image, copy results to this directory and remove the image afterwards
 IMAGE=compile_openfst
