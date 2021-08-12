@@ -1,3 +1,17 @@
+# Attention: this is an archived repository!
+
+As time goes by, the OpenFST 1.8.1 (or maybe even earlier versions) stopped cross-compiling. Already the `configure` script tells you so.
+
+Hence, remembering the original cause of this little project, specifically being able to work with [OpenFST](https://www.openfst.org/) and [OpenGRM](https://www.opengrm.org/) on Windows, I decided to steer everyone with the same cause to another project of mine, [opengrm-vagrant](wincentbalin/opengrm-vagrant), which enables the same, even in three different ways:
+
+1. Use `Vagrantfile` to configure a working environment
+2. Use `Dockerfile` to create a Docker container
+3. Use the shell script `install-opengrm.sh` with WSL (Windows Subservices for Linux) to have an almost native environment
+
+As implied above, this project will not be developed anymore.
+
+----
+
 # OpenFST + OpenGRM-NGram + Thrax compilation for Windows using MinGW
 
 The script `compile_openfst.sh` compiles static Windows binaries of [OpenFST](http://openfst.org), [OpenGRM-NGram](http://www.opengrm.org/twiki/bin/view/GRM/NGramLibrary) and [Thrax](http://www.opengrm.org/twiki/bin/view/GRM/Thrax) using the included `Dockerfile`.
