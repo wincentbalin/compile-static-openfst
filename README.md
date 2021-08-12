@@ -2,7 +2,7 @@
 
 As time goes by, the OpenFST 1.8.1 (or maybe even earlier versions) stopped cross-compiling. Already the `configure` script tells you so.
 
-Hence, remembering the original cause of this little project, specifically being able to work with [OpenFST](https://www.openfst.org/) and [OpenGRM](https://www.opengrm.org/) on Windows, I decided to steer everyone with the same cause to another project of mine, [opengrm-vagrant](wincentbalin/opengrm-vagrant), which enables the same, even in three different ways:
+Hence, remembering the original cause of this little project, specifically being able to work with [OpenFST](https://www.openfst.org/) and [OpenGRM](https://www.opengrm.org/) on Windows, I decided to steer everyone with the same cause to another project of mine, [opengrm-vagrant](https://github.com/wincentbalin/opengrm-vagrant), which enables the same, even in three different ways:
 
 1. Use `Vagrantfile` to configure a working environment
 2. Use `Dockerfile` to create a Docker container
