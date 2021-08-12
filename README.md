@@ -6,7 +6,7 @@ Hence, remembering the original cause of this little project, specifically being
 
 1. Use `Vagrantfile` to configure a working environment
 2. Use `Dockerfile` to create a Docker container
-3. Use the shell script `install-opengrm.sh` with WSL (Windows Subservices for Linux) to have an almost native environment
+3. Use the shell script `install-opengrm.sh` with WSL (Windows Subsystem for Linux) to have an almost native environment
 
 As implied above, this project will not be developed anymore.
 
